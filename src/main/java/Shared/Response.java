@@ -10,10 +10,13 @@ public class Response {
     public String responseCreator(Statement statement, String clientRequest) throws SQLException {
         JSONObject jsonRequest = new JSONObject(clientRequest);
         boolean doesUserExist = usernameTaken(statement, jsonRequest);
-        if (jsonRequest.get("action").equals("loginMenu")) {
-            return loginMenu(jsonRequest);
+        if (jsonRequest.get("action").equals("helloMenu")) {
+            return helloMenu(jsonRequest);
         }
         else if (jsonRequest.get("action").equals("checkLogin")) {
+            return checkLogin(statement, jsonRequest, doesUserExist);
+        }
+        else if (jsonRequest.get("action").equals("checkSignup")) {
             return checkLogin(statement, jsonRequest, doesUserExist);
         }
         else if (jsonRequest.get("action").equals("homePage")) {
@@ -22,8 +25,8 @@ public class Response {
         return null;
     }
 
-    public String loginMenu(JSONObject receivedMessage) {
-        receivedMessage.put("action", "loginMenu");
+    public String helloMenu(JSONObject receivedMessage) {
+        receivedMessage.put("action", "helloMenu");
         return receivedMessage.toString();
     }
 
@@ -61,6 +64,13 @@ public class Response {
         }
         return message.toString();
     }
+
+//    public String checkSignup(Statement statement, JSONObject receivedMessage, boolean usernameTaken) {
+//        JSONObject message = new JSONObject();
+//        if (usernameTaken) {
+//
+//        }
+//    }
 
     public String homePage(JSONObject receivedMessage) {
         JSONObject message = new JSONObject();

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Request {
     public String requestCreator(JSONObject serverResponse) {
         if (serverResponse.get("action").equals("loginMenu")) {
-            return sendLoginMenuRequest();
+            return sendLoginMenuRequest(serverResponse);
         }
         return null;
     }
@@ -21,13 +21,13 @@ public class Request {
         Scanner input = new Scanner(System.in);
         int choice = Integer.parseInt(input.nextLine());
         if (choice == 1) {
-            return sendLoginRequest();
+            //return sendLoginRequest();
         }
         else if (choice == 2) {
-            return sendSignupRequest();
+            //return sendSignupRequest();
         }
         else if (choice == 3) {
-            return endRequest();
+            //return endRequest();
         }
         return null;
     }

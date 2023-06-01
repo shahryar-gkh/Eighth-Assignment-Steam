@@ -75,17 +75,18 @@ public class ServerMain
         }
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         /*
         I used these lines of codes to create the necessary tables and also  import the games data from the "resources" folder.
         I commented them because they are all part of a one-time process.
         */
 
-        //final File folder = new File("C:\\Users\\USER\\IdeaProjects\\Eighth-Assignment-Steam\\src\\main\\java\\Server\\Resources");
-        //GamesDatabase.createGameTable(connection, statement);
-        //GamesDatabase.putFilesInDatabase(folder, connection, statement);
-        //AccountsDatabase.createAccountsTable(statement);
+        final File folder = new File("C:\\Users\\USER\\IdeaProjects\\Eighth-Assignment-Steam\\src\\main\\java\\Server\\Resources");
+        GamesDatabase.createGamesTable(statement);
+        GamesDatabase.putFilesInDatabase(folder, connection, statement);
+        AccountsDatabase.createAccountsTable(statement);
+        DownloadsDatabase.createDownloadsTable(statement);
 
-        ServerMain server = new ServerMain(5000);
+        //ServerMain server = new ServerMain(5000);
     }
 }
