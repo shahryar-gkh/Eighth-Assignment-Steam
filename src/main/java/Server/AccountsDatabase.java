@@ -12,6 +12,7 @@ public class AccountsDatabase {
                 "DATE_OF_BIRTH DATE NOT NULL)");
         System.out.println("The accounts table has been created successfully!");
     }
+
     public static void addAccount(Statement statement, JSONObject userRequest) throws SQLException {
         statement.executeUpdate("INSERT INTO ACCOUNTS VALUES ('" +
                 userRequest.get("id") + "', '" + userRequest.get("username") +

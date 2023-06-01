@@ -1,42 +1,40 @@
 package Server;
+
 import java.net.*;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class ServerMain
-{
-    //initialize socket and input stream
-    private Socket socket = null;
-    private ServerSocket server = null;
-    private DataInputStream in = null;
+public class ServerMain {
     protected static String url = "jdbc:postgresql://localhost:5432/steam";
     protected static String user = "postgres";
     protected static String pass = "123456";
     protected static Connection connection;
-
     static {
         try {
             connection = DriverManager.getConnection(url, user, pass);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
     protected static Statement statement;
-
     static {
         try {
             statement = connection.createStatement();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private Socket socket = null;
+    private ServerSocket server = null;
+    private DataInputStream in = null;
+    public void start() throws IOException {
+        Socket socket = server.accept();
+        System.out.println("Client connected: " + socket.getRemoteSocketAddress());
+    }
     public ServerMain(int port) throws SQLException {
-        // starts server and waits for a connection
         try
         {
             server = new ServerSocket(port);
@@ -87,6 +85,6 @@ public class ServerMain
         AccountsDatabase.createAccountsTable(statement);
         DownloadsDatabase.createDownloadsTable(statement);
 
-        //ServerMain server = new ServerMain(5000);
+        ServerMain server = new ServerMain(5000);
     }
 }

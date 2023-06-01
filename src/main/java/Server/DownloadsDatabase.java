@@ -11,6 +11,7 @@ public class DownloadsDatabase {
                 "DOWNLOAD_COUNT INTEGER NOT NULL)");
         System.out.println("The downloads table has been created successfully!");
     }
+
     public static void addAccount(Statement statement, JSONObject userRequest) throws SQLException {
         statement.executeUpdate("INSERT INTO ACCOUNTS VALUES ('" +
                 userRequest.get("id") + "', '" + userRequest.get("username") +
