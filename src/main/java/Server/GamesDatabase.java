@@ -4,35 +4,27 @@ import java.io.*;
 import java.sql.*;
 import java.util.Scanner;
 
-public class InsertIntoDB {
-    public static void listFilesForFolder(File folder, String databaseName) {
-        String url = "jdbc:postgresql://localhost:5432/" + databaseName;
-        String user = "postgres";
-        String pass = "123456";
+public class GamesDatabase {
+    public static void createGameTable(Connection connection, Statement statement) throws SQLException {
+                    statement.executeUpdate("CREATE TABLE GAMES " +
+                    "(ID INT PRIMARY KEY NOT NULL, " +
+                    "TITLE TEXT NOT NULL, " +
+                    "DEVELOPER TEXT NOT NULL, " +
+                    "GENRE TEXT NOT NULL, " +
+                    "PRICE DOUBLE PRECISION NOT NULL, " +
+                    "RELEASE_YEAR INTEGER NOT NULL, " +
+                    "CONTROLLER_SUPPORT BOOLEAN NOT NULL, " +
+                    "REVIEWS INTEGER, " +
+                    "SIZE INTEGER NOT NULL, " +
+                    "FILE_PATH TEXT NOT NULL)");
+    }
+    public static void putFilesInDatabase(File folder, Connection connection, Statement statement) {
         try {
-            Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            System.out.println("Connected to the database successfully.");
-            Statement statement = connection.createStatement();
-//            statement.executeUpdate("CREATE TABLE GAMES " +
-//                    "(ID INT PRIMARY KEY NOT NULL, " +
-//                    "TITLE TEXT NOT NULL, " +
-//                    "DEVELOPER TEXT NOT NULL, " +
-//                    "GENRE TEXT NOT NULL, " +
-//                    "PRICE DOUBLE PRECISION NOT NULL, " +
-//                    "RELEASE_YEAR INTEGER NOT NULL, " +
-//                    "CONTROLLER_SUPPORT BOOLEAN NOT NULL, " +
-//                    "REVIEWS INTEGER, " +
-//                    "SIZE INTEGER NOT NULL, " +
-//                    "FILE_PATH TEXT NOT NULL)");
-//            statement.executeUpdate("INSERT INTO GAMES " +
-//                    "(ID, TITLE, DEVELOPER, GENRE, PRICE, RELEASE_YEAR, CONTROLLER_SUPPORT, REVIEWS, SIZE, FILE_PATH) " +
-//                    "VALUES (2838298, 'Minecraft', 'idk', 'pixels', 8.99, 1998, true, 82, 133, 'C')");
 //            ResultSet result = statement.executeQuery("SELECT * FROM GAMES");
 //            result.next();
             for (final File fileEntry : Objects.requireNonNull(folder.listFiles())) {
                 if (fileEntry.isDirectory()) {
-                    listFilesForFolder(fileEntry, databaseName);
+                    putFilesInDatabase(fileEntry, connection, statement);
                 }
                 else if (fileEntry.getName().endsWith(".txt")) {
                     Scanner reader = new Scanner(fileEntry);
@@ -61,9 +53,5 @@ public class InsertIntoDB {
         catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
-    }
-    public static void main(String[] args) {
-        final File folder = new File("C:\\Users\\USER\\IdeaProjects\\Eighth-Assignment-Steam\\src\\main\\java\\Server\\Resources");
-        listFilesForFolder(folder, "steam");
     }
 }
