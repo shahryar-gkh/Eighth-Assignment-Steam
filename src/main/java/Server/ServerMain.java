@@ -1,5 +1,6 @@
 package Server;
 
+import Shared.Response;
 import java.net.*;
 import java.io.*;
 import java.sql.*;
@@ -8,6 +9,7 @@ public class ServerMain {
     protected static String url = "jdbc:postgresql://localhost:5432/steam";
     protected static String user = "postgres";
     protected static String pass = "123456";
+
     protected static Connection connection;
     static {
         try {
@@ -17,6 +19,7 @@ public class ServerMain {
             throw new RuntimeException(e);
         }
     }
+
     protected static Statement statement;
     static {
         try {
@@ -30,47 +33,16 @@ public class ServerMain {
     private Socket socket = null;
     private ServerSocket server = null;
     private DataInputStream in = null;
+
+    public ServerMain(int port) throws SQLException, IOException {
+        this.server = new ServerSocket(port);
+    }
+
     public void start() throws IOException {
         Socket socket = server.accept();
         System.out.println("Client connected: " + socket.getRemoteSocketAddress());
-    }
-    public ServerMain(int port) throws SQLException {
-        try
-        {
-            server = new ServerSocket(port);
-            System.out.println("Server started");
-
-            System.out.println("Waiting for a client ...");
-
-            socket = server.accept();
-            System.out.println("Client accepted");
-
-            // takes input from the client socket
-            in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
-            String line = "";
-
-            // reads message from client until "Over" is sent
-            while (!line.isEmpty())
-            {
-                try
-                {
-                    line = in.readUTF();
-                    System.out.println(line);
-                }
-                catch(IOException i)
-                {
-                    System.out.println(i);
-                }
-            }
-            System.out.println("Closing connection");
-            socket.close();
-            in.close();
-        }
-        catch(Exception e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-        }
+        ClientThreads threads = new ClientThreads(connection, socket);
+        threads.start();
     }
 
     public static void main(String[] args) throws SQLException, IOException {
@@ -79,12 +51,13 @@ public class ServerMain {
         I commented them because they are all part of a one-time process.
         */
 
-        final File folder = new File("C:\\Users\\USER\\IdeaProjects\\Eighth-Assignment-Steam\\src\\main\\java\\Server\\Resources");
-        GamesDatabase.createGamesTable(statement);
-        GamesDatabase.putFilesInDatabase(folder, connection, statement);
-        AccountsDatabase.createAccountsTable(statement);
-        DownloadsDatabase.createDownloadsTable(statement);
+        // final File folder = new File("C:\\Users\\USER\\IdeaProjects\\Eighth-Assignment-Steam\\src\\main\\java\\Server\\Resources");
+        // GamesDatabase.createGamesTable(statement);
+        // GamesDatabase.putFilesInDatabase(folder, statement);
+        // AccountsDatabase.createAccountsTable(statement);
+        // DownloadsDatabase.createDownloadsTable(statement);
 
         ServerMain server = new ServerMain(5000);
+        server.start();
     }
 }

@@ -20,10 +20,10 @@ public class GamesDatabase {
         System.out.println("The games table has been created successfully!");
     }
 
-    public static void putFilesInDatabase(File folder, Connection connection, Statement statement) throws IOException, SQLException {
+    public static void putFilesInDatabase(File folder, Statement statement) throws IOException, SQLException {
         for (final File fileEntry : Objects.requireNonNull(folder.listFiles())) {
             if (fileEntry.isDirectory()) {
-                putFilesInDatabase(fileEntry, connection, statement);
+                putFilesInDatabase(fileEntry, statement);
             }
             else if (fileEntry.getName().endsWith(".txt")) {
                 Scanner reader = new Scanner(fileEntry);

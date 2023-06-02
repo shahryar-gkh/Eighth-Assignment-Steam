@@ -9,20 +9,19 @@ import Server.AccountsDatabase;
 import org.json.*;
 
 public class Response {
-    public static String responseCreator(Statement statement, String clientRequest) throws SQLException {
-        JSONObject jsonRequest = new JSONObject(clientRequest);
-        boolean doesUserExist = usernameTaken(statement, jsonRequest);
-        if (jsonRequest.get("action").equals("helloMenu")) {
-            return helloMenu(jsonRequest);
+    public static String responseCreator(Statement statement, JSONObject clientRequest) throws SQLException {
+        boolean doesUserExist = usernameTaken(statement, clientRequest);
+        if (clientRequest.get("action").equals("helloMenu")) {
+            return helloMenu(clientRequest);
         }
-        else if (jsonRequest.get("action").equals("checkLogin")) {
-            return checkLogin(statement, jsonRequest, doesUserExist);
+        else if (clientRequest.get("action").equals("checkLogin")) {
+            return checkLogin(statement, clientRequest, doesUserExist);
         }
-        else if (jsonRequest.get("action").equals("checkSignup")) {
-            return checkSignup(statement, jsonRequest, doesUserExist);
+        else if (clientRequest.get("action").equals("checkSignup")) {
+            return checkSignup(statement, clientRequest, doesUserExist);
         }
-        else if (jsonRequest.get("action").equals("homePage")) {
-            return homePage(jsonRequest);
+        else if (clientRequest.get("action").equals("homePage")) {
+            return homePage(clientRequest);
         }
         return null;
     }
